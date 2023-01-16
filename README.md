@@ -92,7 +92,7 @@ data "gitlab_group" "this" {
 }
 
 module "projects" {
-  source        = "sr2c/terraform-gitlab-software-project"
+  source        = "sr2c/software-project/gitlab"
   gitlab_group  = data.gitlab_group.this
   name          = "terraform-null-example"
   description   = "An example Terraform module (null provider)"

@@ -1,0 +1,97 @@
+name: terraform-gitlab-software-project
+license: "BSD-2"
+gitlab_repo: sr2c/terraform-gitlab-software-project
+
+references:
+  - name: GitLab Projects API
+    description: The API documentation for GitLab projects.
+    url: https://docs.gitlab.com/ee/api/projects.html
+  - name: GitHub Repositories
+    description: The API documentation for GitHub repositories.
+    url: https://docs.github.com/en/rest/repos/repos
+
+# Short description of this project
+description: |-
+  Git repository for a software project with optional GitHub mirror.
+
+usage: |-
+  ```hcl
+  terraform {
+    required_providers {
+      gitlab = {
+        source = "gitlabhq/gitlab"
+      }
+      github = {
+        source = "integrations/github"
+      }
+    }
+  }
+  
+  provider "gitlab" {
+    token = local.gitlab_token
+  }
+    
+  provider "github" {
+    token = local.github_token
+    owner = local.github_organization_name
+  }
+  
+  locals {
+    gitlab_token             = ""      # Generate this using the instructions below
+    github_organization_name = "sr2c"  # Change this to your organization's name
+    github_token             = ""      # Generate this using the instructions below
+  }
+  
+  data "gitlab_group" "this" {
+    group_id = 11925634                # Change this to your organization's GitLab group ID
+  }
+  
+  module "projects" {
+    source        = "sr2c/terraform-gitlab-software-project"
+    gitlab_group  = data.gitlab_group.this
+    name          = "terraform-null-example"
+    description   = "An example Terraform module (null provider)"
+    github_mirror = true
+    github_user   = "ExampleMirrorBot"
+    github_token  = local.github_token
+  }
+  ```
+
+  ### Generating the GitLab token
+  
+  To configure GitLab, you will need an access token. GitLab has a variety of scoped access tokens, including
+  [personal](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html) and
+  [group](https://docs.gitlab.com/ee/user/group/settings/group_access_tokens.html) access tokens.
+  Project-level access tokens cannot be used with this module.
+  Create the type of token that is suitable according to your threat model.
+  
+  Add a name so that you will be reminded of the purpose of this token when you go to look at it later.
+  Your access token will need the “api” scope. The expiry can be set according to your threat model.
+  GitLab will send an email warning to token owners 7 days before expiry allowing you to generate a new token and
+  update your configuration.
+  
+  ### Generating the GitHub token
+  
+  To configure GitHub, you will need a “personal access token”. It is not possible to restrict a token to specific
+  repositories, so it is best to create a
+  [machine user](https://docs.github.com/en/developers/overview/managing-deploy-keys#machine-users) and then invite that
+  user to only the repositories that should be accessed to limit the impact of a token disclosure.
+  
+  To create a token, visit the [New personal access token](https://github.com/settings/tokens/new) page of the GitHub
+  settings.
+  Add a note so that you will be reminded of the purpose of this token when you go to look at it later.
+  Your access token will need the “repo” OAuth scope.
+  
+  The expiry can be set according to your threat model. GitHub will
+  [send an email warning](https://github.blog/changelog/2021-07-26-expiration-options-for-personal-access-tokens/)
+  before the token expires allowing you to generate a new token and update your configuration.
+
+
+include:
+- "docs/targets.md"
+- "docs/terraform.md"
+
+contributors:
+  - name: irl
+    gitlab: irlxyz
+    gitlab_id: 5895869

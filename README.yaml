@@ -10,9 +10,8 @@ references:
     description: The API documentation for GitHub repositories.
     url: https://docs.github.com/en/rest/repos/repos
 
-# Short description of this project
 description: |-
-  Git repository for a software project with optional GitHub mirror.
+  GitLab project for a software project with optional GitHub mirror.
 
 usage: |-
   ```hcl
@@ -37,18 +36,15 @@ usage: |-
   }
   
   locals {
-    gitlab_token             = ""      # Generate this using the instructions below
-    github_organization_name = "sr2c"  # Change this to your organization's name
-    github_token             = ""      # Generate this using the instructions below
-  }
-  
-  data "gitlab_group" "this" {
-    group_id = 11925634                # Change this to your organization's GitLab group ID
+    gitlab_token             = ""        # Generate this using the instructions below
+    gitlab_group_id          = 11925634  # Change this to your organization's GitLab group ID
+    github_organization_name = "sr2c"    # Change this to your organization's name
+    github_token             = ""        # Generate this using the instructions below
   }
   
   module "projects" {
     source        = "sr2c/software-project/gitlab"
-    gitlab_group  = data.gitlab_group.this
+    gitlab_group  = local.gitlab_group_id
     name          = "terraform-null-example"
     description   = "An example Terraform module (null provider)"
     github_mirror = true
@@ -86,10 +82,9 @@ usage: |-
   [send an email warning](https://github.blog/changelog/2021-07-26-expiration-options-for-personal-access-tokens/)
   before the token expires allowing you to generate a new token and update your configuration.
 
-
 include:
-- "docs/targets.md"
 - "docs/terraform.md"
+- "docs/targets.md"
 
 contributors:
   - name: irl

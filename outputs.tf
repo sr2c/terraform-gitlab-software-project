@@ -22,8 +22,3 @@ output "github_repository_git_url" {
   value       = (local.create_github_mirror) ? github_repository.this[0].git_clone_url : null
   description = "The URL to clone from the GitHub mirror using the git protocol, if created."
 }
-
-output "github_repository_svn_url" {
-  value       = (local.create_github_mirror) ? github_repository.this[0].svn_url : null
-  description = "The URL to checkout from the GitHub mirror using the Subversion protocol, if created."
-}

@@ -1,3 +1,14 @@
+variable "archived" {
+  description = "Whether the project is archived"
+  default     = false
+  type        = bool
+}
+
+variable "avatar_path" {
+  description = "Filesystem path to the project avatar"
+  default     = null
+  type        = string
+}
 
 variable "description" {
   description = "The project description."
@@ -7,7 +18,7 @@ variable "description" {
 variable "enabled" {
   type        = bool
   default     = true
-  description = "Set to false to prevent the module from creating any resources"
+  description = "Set to false to prevent the module from creating any resources."
 }
 
 variable "github_mirror" {
@@ -22,6 +33,12 @@ variable "github_token" {
   type        = string
 }
 
+variable "gitlab_token" {
+  description = "The GitLab access token to use to trigger an initial mirror push. No initial push will happen if null."
+  default     = null
+  type        = string
+}
+
 variable "github_user" {
   description = "The GitHub username to use for mirroring (required if github_mirror is true)."
   default     = ""
@@ -32,6 +49,18 @@ variable "gitlab_group" {
   description = "The ID of the GitLab group in which to create the project. If this is not specified, it will be created in the personal namespace of the authenticated user."
   default     = null
   type        = number
+}
+
+variable "issues_template" {
+  description = "The template to use for new issues."
+  default     = null
+  type        = string
+}
+
+variable "merge_requests_template" {
+  description = "The template to use for new merge requests."
+  default     = null
+  type        = string
 }
 
 variable "name" {
